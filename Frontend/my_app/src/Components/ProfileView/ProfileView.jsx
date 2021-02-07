@@ -4,11 +4,13 @@ import "./ProfileView.css";
 // git remote add origin https://github.com/Rishabhjain-code/instagram.git
 
 class ProfileView extends Component {
+  // local state
+  // change it on did mount so the it can rerender acc to updated data
   state = {
     user: {
-      username: "ms@dhoni",
-      fullname: "Mahendra Singh Dhoni",
-      userImage: "image/default.png",
+      handle: "ms@dhoni",
+      name: "Mahendra Singh Dhoni",
+      pImage: "image/default.png",
     },
     suggestions: [
       {
@@ -40,15 +42,18 @@ class ProfileView extends Component {
 
   componentDidMount() {
     let uid = "1327529f-fc1e-4f3f-b200-a2c9df65bbee";
-    let address = `https:localhost:3001/user/${uid}`;
-    axios
-      .get(`/user/${uid}`)
-      .then(function (userData) {
-        console.log(userData.data.data);
-      })
-      .catch(function (error) {
-        console.log(error);
+    axios.get(`/user/${uid}`).then((userData) => {
+      let user = userData.data.data;
+      let newUser = {
+        username : user.handle,
+        fullname : user.name,
+        userImage : user.pImage
+      }
+      this.setState({
+        user: user,
       });
+      console.log(user);
+    });
   }
 
   render() {
@@ -59,14 +64,14 @@ class ProfileView extends Component {
         <div className="profile-view-div">
           <div className="profile-view-user-details">
             <div className="profile-view-user-image">
-              <img src={this.state.user.userImage} alt="" />
+              <img src={this.state.user.pImage} alt="" />
             </div>
             <div className="profile-view-user-names">
               <div className="profile-view-username">
-                {this.state.user.username}
+                {this.state.user.handle}
               </div>
               <div className="profile-view-fullname">
-                {this.state.user.fullname}
+                {this.state.user.name}
               </div>
             </div>
           </div>
