@@ -1,0 +1,57 @@
+.profile-view {
+  background-color: white;
+  width: 25%;
+  border: 1px solid lightgray;
+  height: 550px;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+}
+.profile-view-div {
+}
+.profile-view-user-details {
+  display: flex;
+  width: 250px;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid lightgrey;
+}
+.profile-view-user-image {
+}
+.profile-view-user-image img {
+  height: 50px;
+  width: 50px;
+  border: 1px solid black;
+  border-radius: 50%;
+  display: flex;
+  justify-content: space-around;
+  object-fit: cover;
+}
+.profile-view-user-names {
+  margin-left: 5px;
+}
+.profile-view-heading {
+  display: flex;
+  justify-content: center;
+}
+.profile-view-username {
+  background: aliceblue;
+  width: 170px;
+  font-weight: bold;
+}
+.profile-view-fullname {
+  background: aliceblue;
+  width: 170px;
+}
+.profile-view-all-suggestions {
+}
+.profile-view-suggestion-user {
+  display: flex;
+  margin-bottom: 15px;
+  width: 300px;
+  align-items: center;
+}
+.profile-view-follow-button {
+}
+.profile-view-follow-button button {
+}

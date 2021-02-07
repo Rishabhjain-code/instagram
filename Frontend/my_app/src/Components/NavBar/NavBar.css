@@ -1,0 +1,32 @@
+
+.navbar{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding-bottom: 4px;
+    border-bottom: 1.5px solid lightgray;
+    height: 70px;
+    background: white;
+}
+
+.nav.logo{
+    /* border-radius: 25px; */
+    background-color: purple;
+}
+.nav.logo img{
+    height: 3.5rem;
+}
+.nav.search input{
+    height: 30px;
+    width: 350px;
+}
+.nav.links{
+    /* background-color: red; */
+    /* to see its area in the page */
+    display: flex;
+    width: 150px;
+    justify-content: space-around;
+}  
+.nav.links div{
+
+}

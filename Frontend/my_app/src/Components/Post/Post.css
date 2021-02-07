@@ -1,0 +1,100 @@
+.post {
+  height: 550px;
+  width: 500px;
+  border: 1px solid lightgray;
+  background-color: white;
+  margin-bottom: 25px;
+}
+
+.post-username {
+  height: 10%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  border-bottom: 2px solid rgb(229, 234, 238);
+}
+
+.post-username img {
+  height: 50px;
+  width: 50px;
+  border: 1px solid black;
+  border-radius: 50%;
+  display: flex;
+  justify-content: space-around;
+  object-fit: contain;
+}
+
+.username {
+  width: 300px;
+}
+
+.follow-button {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.post-image {
+  display: flex;
+  justify-content: center;
+  border-bottom: 2px solid rgb(229, 234, 238);
+}
+
+.post-image img {
+  width: 60%;
+  object-fit: contain;
+}
+
+.post-actions {
+  height: 5%;
+  width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.like-icon {
+}
+.comment-icon {
+}
+.post-likes-count {
+  height: 5%;
+  padding-left: 10px;
+}
+.post-comments-section {
+  height: 9.5%;
+  padding-left: 10px;
+}
+.post-add-comment {
+  height: 13%;
+  display: flex;
+  border-top: 2px solid rgb(229, 234, 238);
+  align-items: center;
+}
+.post-add-comment input {
+  height: 100%;
+  width: 82%;
+  outline: none;
+  border: none;
+  padding: 10px;
+  overflow: hidden;
+}
+.post-add-comment button {
+  height: 30px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  width: 70px;
+}
+
+#comment-input {
+  background-color: rgba(252, 247, 247, 0.856);
+  height: 100%;
+  max-height: 100px;
+  width: 82%;
+  outline: none;
+  border: none;
+  padding: 10px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
