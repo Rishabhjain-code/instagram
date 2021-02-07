@@ -270,39 +270,21 @@ async function unfollow(req, res) {
 
 async function getSuggestions(req, res) {
   try{
-      let {uid} = req.params;
-      // console.log(uid);
-      let followingIdsArray = await getAllFollowingIdsPromisifed(uid);
-      // console.log(followingIdsArray); // [ {} , {} , {} , {} , {} ]
+      let {uid} = req.body;
+      let followingIds = await getAllFollowingIdsPromisifed(uid);
+      let suggestionsIds = [];
 
-      let followingIds = followingIdsArray.map( obj =>{
-        return obj.followId;
-      });
-      // console.log(followingIds);
-      // followingIds = [  '12132' , '124124' , '124124' ];
-      let suggestionIds = [];
-      for(let i=0 ; i<followingIds.length ; i++){
-        let followId = followingIds[i];
-        // console.log(followId);
-        let followingIdsOfFollowingArray = await getAllFollowingIdsPromisifed(followId);
-        for(let j=0 ; j<followingIdsOfFollowingArray.length ; j++){
-          if(  !followingIds.includes(followingIdsOfFollowingArray[j].followId) && followingIdsOfFollowingArray[j].followId != uid){
-            suggestionIds.push(followingIdsOfFollowingArray[j].followId);
+      for(let i=0 ; i<followingIds.length ;i++){
+          let followingIdsOfFriends = await getAllFollowingIdsPromisifed(followingIds[i].followId);
+          for(let i=0 ; i<followingIdsOfFriends.length ; i++){
+              for(let j=0 ; j<followingIds.length ; j++){
+                  if(followingIds[j].followId != followingIdsOfFriends[i].followId){
+                      suggestionsIds.push(followingIdsOfFriends[i].followId);
+                  }
+              }
           }
-        }
       }
-      // console.log("suggestions" , suggestionIds);
-      // console.log(suggestionIds);
-      let suggestions = [];
-      for(let i=0 ; i<suggestionIds.length ; i++){
-        let suggestion = await getUserByIdPromisified(suggestionIds[i])
-        suggestions.push(suggestion[0]);
-      }
-      // console.log(suggestions);
-      res.json({
-        message:"Succesfully got all suggestions !!",
-        suggestions
-      })
+      console.log(suggestionsIds);
   }
   catch(error){
       res.json({
