@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React</title>
+
+    <!-- react logic -->
+    <script
+      src="https://unpkg.com/react@17/umd/react.development.js"
+      crossorigin
+    ></script>
+
+    <!-- react dom logic - platform independent logic -->
+    <!-- for website -  dom for mobile - native ka code -->
+    <script
+      src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+
+    <!-- babel code -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+  <body>
+    <!-- everything inside this div -->
+    <div id="root"></div>
+
+    <!-- important to write type="text/babel" -->
+    <!-- USE OF BABEL - TO WRITE HTML IN THE SCRIPT TAG -->
+    <script type="text/babel">
+      //   function Hello() {
+      //       return <h1>Hello from Hello Component</h1>
+      //   }
+
+      //   const element = <h1>Hello from react</h1>;
+      //   ReactDOM.render(element, document.getElementById("root"));
+      //   ReactDOM.render(<Hello></Hello>, document.getElementById("root"));
+
+      //   it also adds extra useless div there = user React.Fragment
+      //   where ever hello tag used it puts this jsx there that converted to reactjs by babel
+
+      //   function Hello() {
+      //     return (
+      //       <div>
+      //         <h1>Hello from Multiple Line</h1>
+      //         <p>Hi I am sended multi tags under a div</p>
+      //       </div>
+      //     );
+      //   }
+      //   ReactDOM.render(<Hello></Hello>, document.getElementById("root"));
+
+      function Hello() {
+        return (
+          <React.Fragment>
+            <h1>Hello from Multiple Line</h1>
+            <p>Hi I am sended multi tags under a div</p>
+          </React.Fragment>
+        );
+      }
+
+      //   ReactDOM.render(<Hello></Hello>, document.getElementById("root"));
+
+      function HelloMultiple() {
+        return (
+          <React.Fragment>
+            <Hello></Hello>
+            <Hello></Hello>
+            <Hello></Hello>
+            <Hello></Hello>
+            <Hello></Hello>
+            <Hello></Hello>
+          </React.Fragment>
+        );
+      }
+
+      //   ReactDOM.render(
+      //     <HelloMultiple></HelloMultiple>,
+      //     document.getElementById("root")
+      //   );
+
+      //   DATA PASSING
+
+      //   props is a object
+
+      //   or by object destructuring
+      //   let {name,age} = props
+      function Hello_DATA_PASSING(props) {
+        return (
+          <React.Fragment>
+            <h1>Hello from {props.name}</h1>
+          </React.Fragment>
+        );
+      }
+
+      // Hello_DATA_PASSING is child and HelloMultiple_DATA_PASSING is parent
+      // DATA PASSING FROM PARENT TO CHILD
+      function HelloMultiple_DATA_PASSING() {
+        return (
+          <React.Fragment>
+            <Hello_DATA_PASSING name="Steve"></Hello_DATA_PASSING>
+            <Hello_DATA_PASSING name="Natasha"></Hello_DATA_PASSING>
+            <Hello_DATA_PASSING name="Hulk"></Hello_DATA_PASSING>
+            <Hello_DATA_PASSING name="Bruce"></Hello_DATA_PASSING>
+            <Hello_DATA_PASSING name="Wanda"></Hello_DATA_PASSING>
+            <Hello_DATA_PASSING></Hello_DATA_PASSING>
+          </React.Fragment>
+        );
+      }
+
+      //   ReactDOM.render(
+      //     <HelloMultiple_DATA_PASSING></HelloMultiple_DATA_PASSING>,
+      //     document.getElementById("root")
+      //   );
+
+      //   doing components from array.length times in the component
+      //   changing users(state) will automatically do the work
+
+      // let users = ["steve", "natasha", "hulk", "bruce", "wanda", "stark"];
+      //   users.push("Modi");
+      //   function HelloParent() {
+      //     return (
+      //       <React.Fragment>
+      //         {users.map(function (name) {
+      //           return <Hello_DATA_PASSING name={name}></Hello_DATA_PASSING>;
+      //         })}
+      //       </React.Fragment>
+      //     );
+      //   }
+
+      //   ReactDOM.render(
+      //     <HelloParent></HelloParent>,
+      //     document.getElementById("root")
+      //   );
+    </script>
+  </body>
+</html>
+
+<!-- most important thing in react is the identify component nature of the react.
+    Biggest component is the app attached on the root div, it has 2 more components - inputBox , Tasks[0,1,2.....]
+
+    components of 2 types = 1.stateless functional components(SFC) - dont have their state - SFC easy to write 
+                            2.Class Based Componenets(have state)
+    componets name always starts with the capital letter
+
+    
+    
+
+-->

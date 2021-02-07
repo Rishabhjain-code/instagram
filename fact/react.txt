@@ -1,0 +1,34 @@
+https://reactjs.org/docs/getting-started.html - main concepts
+1-2 hr
+
+npx create-ract-app APP_Name_in_Small - to create folders as used in devlopment - public src and all then npm start do start our app check if it displays correctly
+
+then public m sirf leave index.html and src m leave 
+
+index.css
+index.js - only boilerplate code must reamin there
+create a App.js then write boiler plate in it
+
+from here we will start our react app
+
+-- import / export
+
+node js framework have require and module.export inspired from this language js have import A from "path" and export default app - to default one thing
+
+
+-------insta application
+
+componentDidMount m api se data fetch krke display karenge
+
+
+
+
+
+
+
+
+
+
+
+questions and answer-
+https://www.upgrad.com/blog/react-interview-questions-answers/

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React</title>
+
+    <!-- react logic -->
+    <script
+      src="https://unpkg.com/react@17/umd/react.development.js"
+      crossorigin
+    ></script>
+
+    <!-- react dom logic - platform independent logic -->
+    <!-- for website -  dom for mobile - native ka code -->
+    <script
+      src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+
+    <!-- babel code -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+  <body>
+    <!-- everything inside this div -->
+    <div id="root"></div>
+
+    <!-- important to write type="text/babel" -->
+    <!-- USE OF BABEL - TO WRITE HTML IN THE SCRIPT TAG -->
+    <script type="text/babel">
+      
+      // basic code of react
+
+      // ReactDom.render("what to render","where to render");
+      const element = <h1>Hello from react</h1>;
+      // above line is jsx => javascript xml => syntactic sugar => got changed to react(js) code by the babel
+      // instead of writing  React.createElement("h1",null,"hello from react") write as html babel will convert it properly
+      ReactDOM.render(element, document.getElementById("root"));
+    </script>
+  </body>
+</html>
+
+<!-- most important thing in react is the identify component nature of the react.
+    Biggest component is the app attached on the root div, it has 2 more components - inputBox , Tasks[0,1,2.....]
+
+    components of 2 types = 1.stateless functional components(SFC) - dont have their state - SFC easy to write 
+                            2.Class Based Componenets(have state)
+
+    
+    
+
+-->

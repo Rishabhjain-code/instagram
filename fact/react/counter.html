@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Counter</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+    <!-- bootstrap carousel also has js thus uske lie also import the js -->
+    <!-- bootstrap classes can be applied directly to the div as well not necessarily with the buttons -->
+
+    <!-- react logic -->
+    <script
+      src="https://unpkg.com/react@17/umd/react.development.js"
+      crossorigin
+    ></script>
+
+    <!-- react dom logic - platform independent logic -->
+    <!-- for website -  dom for mobile - native ka code -->
+    <script
+      src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+
+    <!-- babel code -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- babel -->
+    <script type="text/babel">
+      // sfc
+      // ccb = class component based
+
+      //   boilerplate for ccb
+
+      /* lifecycle methods
+         constructor(has initial state of the page according to which the page comes to the ui),render method
+
+         whenever setState runs it calls the render method to update the ui
+       
+        thus changed without using the dom elements
+        */
+
+      //   class Counter extends React.Component {
+      //     constructor() {
+      //       super();
+      //       this.state = {
+      //         count: 1,
+      //       };
+      //     }
+
+      //     //   this function is of React.Component thus extended this
+      //     render() {
+      //       return <h1>Hello from counter</h1>;
+      //     }
+      //   }
+
+      //   ReactDOM.render(<Counter></Counter>, document.getElementById("root"));
+
+      class Counter extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            count: 0,
+          };
+        }
+
+        increment = () => {
+          console.log("Add Clicked");
+          //   this.state.count = this.state.count + 1;
+          // cant change state directly
+          this.setState({
+            count: this.state.count + 1,
+          });
+        };
+
+        decrement = () => {
+          console.log("Minus Clicked");
+          //setState predefined function of the React to change the state of the class Based Components
+          this.setState({
+            count: this.state.count - 1,
+          });
+        };
+
+        reset = ()=>{
+            this.setState({
+                count:0
+            })
+        }
+
+        //   this function is of React.Component thus extended this
+        render() {
+          let count = this.state.count;
+
+          // div block level element
+          // pass the variable in the jsx surrounded by {}
+          // if directly will treat it as a normal text only
+
+          //   container to make a box with box model props specified
+          // m-3 for margin
+
+          // click and change - no selector directly use on click
+
+          //   jsx has className instead of the class
+
+          //   this used in the class Based Components , for using properties/methods of the class
+
+          // {} - inside jsx to use variables/methods
+          // onClick = only name of function else run as found on then html
+
+          return (
+            <React.Fragment>
+              <div className="counter container">
+                <div className="count m-3">
+                  <div className="badge badge-fill badge-dark">{count}</div>
+                </div>
+                <div className="actions">
+                  <div
+                    className="add btn btn-primary m-2"
+                    onClick={this.increment}
+                  >
+                    +
+                  </div>
+                  <div
+                    className="minus btn btn-danger m-2"
+                    onClick={this.decrement}
+                  >
+                    -
+                  </div>
+                  <div className ="btn btn-warning m-2" onClick = {this.reset}>Reset</div>
+                </div>
+              </div>
+            </React.Fragment>
+          );
+        }
+      }
+
+      ReactDOM.render(<Counter></Counter>, document.getElementById("root"));
+    </script>
+  </body>
+</html>
+
+
+<!-- LIFECYCLE METHODS
+
+  for all components in the react, each component have a lifecycle - phases - phase1(Mounting) phase2(Updating) phase3(Unmounting)
+
+  MOUNTING 
+  
+  - first constructor will run , then render function , componentDidMount(predefined class method) 
+  - SKELETON UI - ui with temp data 
+  constructor - state(initial state without any data i.e empty - skeleton ui logic) 
+  then rendor method - to load the ui(low cost data is displayed that takes very less time)
+  componentDidMount - data work(bring data from the web/ backend - now run this.setState() to change the state by the data we have , due to setState render function will again run - now its updation phase )
+
+  UPDATING
+
+  now any new data it comes via component Did Update (again called this.setState to run the render function) - updation keeps on running - most of the time application is in updating phase
+
+-->
