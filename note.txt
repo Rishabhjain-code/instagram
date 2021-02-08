@@ -1,1 +1,8 @@
-new part is router and suggestion api
+new part is mvc 
+and suggestion api 
+
+now backend has the part from where front end 2 starts
+i.e user / request work / unfollow and suggestion api etc (in videos)
+multer(written)
+
+backend copy has backend (may be final one)
