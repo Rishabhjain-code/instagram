@@ -1,14 +1,15 @@
 const connection = require("../model/db");
 const { getUserByIdPromisified } = require("./userController");
 
-function addInFollowingTablePromisified(uid, follow_id, isPublic) {
+function addInFollowingTablePromisified(user_id, following_id, is_public) {
   return new Promise(function (resolve, reject) {
     let sql;
-    if (isPublic) {
-      sql = `INSERT INTO following_table(uid , followId) VALUES('${uid}' , '${follow_id}')`;
+    if (is_public) {
+      sql = `INSERT INTO user_following(user_id , following_id,is_accepted) VALUES('${user_id}' , '${following_id}' , true)`;
     } else {
-      sql = `INSERT INTO following_table(uid , followId , isAccepted ) VALUES('${uid}' , '${follow_id}' , false )`;
+      sql = `INSERT INTO user_following(user_id , following_id , is_accepted ) VALUES('${user_id}' , '${following_id}' , false )`;
     }
+    console.log(sql);
     connection.query(sql, function (error, data) {
       if (error) {
         reject(error);
@@ -18,9 +19,9 @@ function addInFollowingTablePromisified(uid, follow_id, isPublic) {
     });
   });
 }
-function addInFollowerTablePromisified(follower_id, uid) {
+function addInFollowerTablePromisified(follower_id, user_id) {
   return new Promise(function (resolve, reject) {
-    let sql = `INSERT INTO follower_table(uid , followerId) VALUES('${uid}' , '${follower_id}')`;
+    let sql = `INSERT INTO user_follower(user_id , follower_id) VALUES('${user_id}' , '${follower_id}')`;
     connection.query(sql, function (error, data) {
       if (error) {
         reject(error);
@@ -30,9 +31,9 @@ function addInFollowerTablePromisified(follower_id, uid) {
     });
   });
 }
-function acceptRequestPromisified(followId, uid) {
+function acceptRequestPromisified(following_id, user_id) {
   return new Promise(function (resolve, reject) {
-    let sql = `UPDATE following_table SET isAccepted = 1 WHERE uid = '${uid}' AND followId = '${followId}'`;
+    let sql = `UPDATE user_following SET is_accepted = 1 WHERE user_id = '${user_id}' AND following_id = '${following_id}'`;
     connection.query(sql, function (error, data) {
       if (error) {
         reject(error);
@@ -42,9 +43,9 @@ function acceptRequestPromisified(followId, uid) {
     });
   });
 }
-function getRequestsPromisfied(followId) {
+function getPendingRequestsPromisfied(following_id) {
   return new Promise(function (resolve, reject) {
-    let sql = `SELECT * FROM following_table WHERE followId = '${followId}' AND isAccepted = false`;
+    let sql = `SELECT * FROM user_following WHERE following_id = '${following_id}' AND is_accepted = false`;
     connection.query(sql, function (error, data) {
       if (error) {
         reject(error);
@@ -54,9 +55,9 @@ function getRequestsPromisfied(followId) {
     });
   });
 }
-function cancelRequestPromisified(followId, uid) {
+function cancelRequestPromisified(following_id, user_id) {
   return new Promise(function (resolve, reject) {
-    let sql = `DELETE FROM following_table WHERE uid = '${uid}' AND followId = '${followId}'`;
+    let sql = `DELETE FROM user_following WHERE user_id = '${user_id}' AND following_id = '${following_id}'`;
     connection.query(sql, function (error, data) {
       if (error) {
         reject(error);
@@ -66,9 +67,9 @@ function cancelRequestPromisified(followId, uid) {
     });
   });
 }
-function getAllFollowersIdsPromisifed(uid) {
+function getAllFollowersIdsPromisifed(user_id) {
   return new Promise(function (resolve, reject) {
-    let sql = `SELECT followerId FROM follower_table WHERE uid = '${uid}'`;
+    let sql = `SELECT follower_id FROM user_follower WHERE user_id = '${user_id}'`;
     connection.query(sql, function (error, data) {
       if (error) {
         reject(error);
@@ -78,9 +79,9 @@ function getAllFollowersIdsPromisifed(uid) {
     });
   });
 }
-function getAllFollowingIdsPromisifed(uid) {
+function getAllFollowingIdsPromisifed(user_id) {
   return new Promise(function (resolve, reject) {
-    let sql = `SELECT followId FROM following_table WHERE uid = '${uid}' AND isAccepted = true`;
+    let sql = `SELECT following_id FROM user_following WHERE user_id = '${user_id}' AND is_accepted = true`;
     connection.query(sql, function (error, data) {
       if (error) {
         reject(error);
@@ -90,59 +91,56 @@ function getAllFollowingIdsPromisifed(uid) {
     });
   });
 }
-
-function deleteFromFollowingTable(uid, followId) {
+function deleteFromFollowingTable(user_id, following_id) {
   return new Promise(function (resolve, reject) {
-      let sql = `DELETE FROM following_table WHERE uid = '${uid}' AND followId = '${followId}'`;
-      connection.query(sql , function(error , data){
-          if(error){
-              reject(error);
-          }
-          else{
-              resolve(data);
-          }
-      })
+    let sql = `DELETE FROM user_following WHERE user_id = '${user_id}' AND following_id = '${following_id}'`;
+    connection.query(sql, function (error, data) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(data);
+      }
+    });
   });
 }
-function deleteFromFollowerTable(followerId, uid) {
+function deleteFromFollowerTable(follower_id, user_id) {
   return new Promise(function (resolve, reject) {
-    let sql = `DELETE FROM follower_table WHERE uid = '${uid}' AND followerId = '${followerId}'`;
-    connection.query(sql , function(error , data){
-        if(error){
-            reject(error);
-        }
-        else{
-            resolve(data);
-        }
-    })
+    let sql = `DELETE FROM user_follower WHERE user_id = '${user_id}' AND follower_id = '${follower_id}'`;
+    connection.query(sql, function (error, data) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(data);
+      }
+    });
   });
 }
-
 async function sendRequest(req, res) {
   try {
-    let { uid, follow_id } = req.body;
+    let { user_id, follow_id } = req.body;
     let user = await getUserByIdPromisified(follow_id);
-    console.log(user);
-    let isPublic = user[0].isPublic;
-    if (isPublic) {
+    let is_public = user[0].is_public;
+    if (is_public) {
       console.log("inside is Public true");
-      //add in following table with isAccepted = true
-      let followData = await addInFollowingTablePromisified(
-        uid,
+      //add in following table with is_accepted = true
+      let followingData = await addInFollowingTablePromisified(
+        user_id,
         follow_id,
         true
       );
-      let followerData = await addInFollowerTablePromisified(uid, follow_id);
+      let followerData = await addInFollowerTablePromisified(
+        user_id,
+        follow_id
+      );
       res.json({
         message: "Request sent and accepted !!",
-        followData,
+        followingData,
         followerData,
       });
     } else {
-      console.log("inside isPublic false");
-      //add in following table with isAccepted = false
-      let data = await addInFollowingTablePromisified(uid, follow_id);
-      console.log(data);
+      console.log("inside is_public false");
+      //add in following table with is_accepted = false
+      let data = await addInFollowingTablePromisified(user_id, follow_id);
       res.json({
         message: "Request Sent and is Pending !!",
         data,
@@ -151,15 +149,15 @@ async function sendRequest(req, res) {
   } catch (error) {
     res.json({
       message: "failed to send request !!",
-      error,
+      error: error,
     });
   }
 }
 async function acceptRequest(req, res) {
   try {
-    let { uid, toBeAcceptedId } = req.body;
-    let acceptData = await acceptRequestPromisified(uid, toBeAcceptedId);
-    let followerData = await addInFollowerTablePromisified(toBeAcceptedId, uid);
+    let { user_id, accept_id } = req.body;
+    let acceptData = await acceptRequestPromisified(user_id, accept_id);
+    let followerData = await addInFollowerTablePromisified(accept_id, user_id);
     res.json({
       message: "Accepted Request !",
       acceptData,
@@ -174,17 +172,17 @@ async function acceptRequest(req, res) {
 }
 async function getPendingRequests(req, res) {
   try {
-    let uid = req.params.uid;
-    let requests = await getRequestsPromisfied(uid);
+    let user_id = req.params.uid;
+    let requests = await getPendingRequestsPromisfied(user_id);
     // console.log(requests);
     let requestsNames = [];
     for (let i = 0; i < requests.length; i++) {
-      let user = await getUserByIdPromisified(requests[i].uid);
+      let user = await getUserByIdPromisified(requests[i].user_id);
       requestsNames.push(user[0]);
     }
     console.log(requestsNames);
     res.json({
-      message: "Got All Requests !",
+      message: "Got All Pending Requests !",
       requestsNames,
     });
   } catch (error) {
@@ -196,8 +194,8 @@ async function getPendingRequests(req, res) {
 }
 async function cancelRequest(req, res) {
   try {
-    let { uid, toBeCancelId } = req.body;
-    let cancelObj = await cancelRequestPromisified(uid, toBeCancelId);
+    let { user_id, cancel_id } = req.body;
+    let cancelObj = await cancelRequestPromisified(user_id, cancel_id);
     res.json({
       message: "Cancelled Request !",
       cancelObj,
@@ -211,12 +209,12 @@ async function cancelRequest(req, res) {
 }
 async function getAllFollowers(req, res) {
   try {
-    let uid = req.params.uid;
-    let followersIds = await getAllFollowersIdsPromisifed(uid);
+    let user_id = req.params.uid;
+    let followersIds = await getAllFollowersIdsPromisifed(user_id);
     let followers = [];
     for (let i = 0; i < followersIds.length; i++) {
-      let followerId = followersIds[i].followerId;
-      let user = await getUserByIdPromisified(followerId);
+      let follower_id = followersIds[i].follower_id;
+      let user = await getUserByIdPromisified(follower_id);
       followers.push(user[0]);
     }
     res.json({
@@ -229,15 +227,27 @@ async function getAllFollowers(req, res) {
     });
   }
 }
+
+function uniqueElements(arr) {
+  let temp = [];
+  for (let i = 0; i < arr.length; i++) {
+    if (!temp.includes(arr[i])) {
+      temp.push(arr[i]);
+    }
+  }
+  return temp;
+}
+
 async function getAllFollowing(req, res) {
   try {
-    let uid = req.params.uid;
-    let followingIds = await getAllFollowingIdsPromisifed(uid);
-    // console.log(followingIds);
+    let user_id = req.params.uid;
+    let followingIds = await getAllFollowingIdsPromisifed(user_id);
+    followingIds = uniqueElements(followingIds);
     let following = [];
     for (let i = 0; i < followingIds.length; i++) {
-      let followId = followingIds[i].followId;
-      let user = await getUserByIdPromisified(followId);
+      let following_id = followingIds[i].following_id;
+      let user = await getUserByIdPromisified(following_id);
+      4;
       following.push(user[0]);
     }
     res.json({
@@ -252,14 +262,14 @@ async function getAllFollowing(req, res) {
 }
 async function unfollow(req, res) {
   try {
-    let { uid, unfollowId } = req.body;
-    let followingObj = await deleteFromFollowingTable(uid, unfollowId);
-    let followerObj = await deleteFromFollowerTable(uid, unfollowId);
+    let { user_id, unfollow_id } = req.body;
+    let followingObj = await deleteFromFollowingTable(user_id, unfollow_id);
+    let followerObj = await deleteFromFollowerTable(user_id, unfollow_id);
     res.json({
-        message:"Unfollowed succesfully !",
-        followingObj,
-        followerObj
-    })
+      message: "Unfollowed succesfully !",
+      followingObj,
+      followerObj,
+    });
   } catch (error) {
     res.json({
       message: "Failed to unfollow !",
@@ -269,27 +279,56 @@ async function unfollow(req, res) {
 }
 
 async function getSuggestions(req, res) {
-  try{
-      let {uid} = req.body;
-      let followingIds = await getAllFollowingIdsPromisifed(uid);
-      let suggestionsIds = [];
+  try {
+    let { uid } = req.params;
+    let followingIdsArray = await getAllFollowingIdsPromisifed(uid);
+    console.log("FOLLOWING OF USER", followingIdsArray);
 
-      for(let i=0 ; i<followingIds.length ;i++){
-          let followingIdsOfFriends = await getAllFollowingIdsPromisifed(followingIds[i].followId);
-          for(let i=0 ; i<followingIdsOfFriends.length ; i++){
-              for(let j=0 ; j<followingIds.length ; j++){
-                  if(followingIds[j].followId != followingIdsOfFriends[i].followId){
-                      suggestionsIds.push(followingIdsOfFriends[i].followId);
-                  }
-              }
-          }
+    let followingIds = followingIdsArray.map((obj) => {
+      return obj.following_id;
+    });
+    console.log("FOLLOWING ID OF USER FOLLWING", followingIds);
+
+    let suggestionsIds = [];
+    for (let i = 0; i < followingIds.length; i++) {
+      let following_id = followingIds[i];
+      // B,C,D
+      let followingIdsOf_User_ith_Following = await getAllFollowingIdsPromisifed(
+        following_id
+      );
+      console.log(
+        `FOLLOWING OF USER FOLLOWING[${i}]`,
+        followingIdsOf_User_ith_Following
+      );
+
+      for (let j = 0; j < followingIdsOf_User_ith_Following.length; j++) {
+        let fid = followingIdsOf_User_ith_Following[j].following_id;
+        // console.log(fid);
+        if (
+          fid != uid &&
+          !followingIds.includes(fid) &&
+          !suggestionsIds.includes(fid)
+        ) {
+          suggestionsIds.push(fid);
+        }
       }
-      console.log(suggestionsIds);
-  }
-  catch(error){
-      res.json({
-          message:"Failed to get suggestions !!"
-      })
+    }
+
+    console.log("Suggestion Ids", suggestionsIds);
+    let suggestionsUser = [];
+    for (let i = 0; i < suggestionsIds.length; i++) {
+      let user = await getUserByIdPromisified(suggestionsIds[i]);
+      suggestionsUser.push(user[0]);
+    }
+    console.log("Suggestion Users", suggestionsUser);
+    res.json({
+      message: "Suggestions got Successfully!!!",
+      suggestions: suggestionsUser,
+    });
+  } catch (error) {
+    res.json({
+      message: "Failed to get suggestions !!",
+    });
   }
 }
 

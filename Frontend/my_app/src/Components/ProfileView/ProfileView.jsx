@@ -8,52 +8,37 @@ class ProfileView extends Component {
   // change it on did mount so the it can rerender acc to updated data
   state = {
     user: {
+      // our db has handle current have username thus he let it as it is but I changed change everywhere he writes username accordingly where he took data from backend
       handle: "ms@dhoni",
       name: "Mahendra Singh Dhoni",
       pImage: "image/default.png",
     },
-    suggestions: [
-      {
-        id: 1,
-        username: "@rogers",
-        userImage: "image/suggestion.jpg",
-        fullname: "Roger fedrar",
-      },
-      {
-        id: 2,
-        username: "steve",
-        userImage: "image/suggestion2.jpg",
-        fullname: "Steve Rogers",
-      },
-      {
-        id: 3,
-        username: "kohli@2",
-        userImage: "image/suggestion3.jpg",
-        fullname: "Kohli Rogers",
-      },
-      {
-        id: 4,
-        username: "king@kohli",
-        userImage: "image/suggestion4.jpg",
-        fullname: "Virat Kohli",
-      },
-    ],
+    suggestions: [{}],
   };
 
   componentDidMount() {
     let uid = "1327529f-fc1e-4f3f-b200-a2c9df65bbee";
-    axios.get(`/user/${uid}`).then((userData) => {
-      let user = userData.data.data;
-      let newUser = {
-        username : user.handle,
-        fullname : user.name,
-        userImage : user.pImage
-      }
-      this.setState({
-        user: user,
+    // eqv to https:localhost:3000/user/uid as written proxy in package.json of frontend
+    let user;
+    axios
+      .get(`api/user/${uid}`)
+      .then((userData) => {
+        user = userData.data.data[0];
+      })
+      .then(() => {
+        return axios.get(`api/request/suggestions/${uid}`);
+      })
+      .then((obj) => {
+        console.log(obj);
+        let suggestions = obj.data.suggestions;
+        this.setState({
+          user: user,
+          suggestions: suggestions,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
       });
-      console.log(user);
-    });
   }
 
   render() {
@@ -75,11 +60,11 @@ class ProfileView extends Component {
               </div>
             </div>
           </div>
-
           <div className="profile-view-all-suggestions">
             <div className="profile-view-heading">
               <h4>Suggestions</h4>
             </div>
+            {console.log(this.state)}
             {this.state.suggestions.map((suggestion) => {
               return (
                 <div

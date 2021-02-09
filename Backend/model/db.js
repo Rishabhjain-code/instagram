@@ -1,5 +1,5 @@
 const mysql = require("mysql");
-const { HOST, USER, PASSWORD, DB_NAME } = require("../config/secrets");
+const { HOST, USER, PASSWORD, DB_NAME } = require("./secrets");
 
 
 //database connection

@@ -4,9 +4,9 @@ const { sendRequest, acceptRequest, cancelRequest, getPendingRequests, getAllFol
 const requestRouter = express.Router();
 
 //"/api/request"
-requestRouter.route("").post(sendRequest).delete(cancelRequest);
+requestRouter.route("/").post(sendRequest).delete(cancelRequest);
 requestRouter.route("/accept").patch(acceptRequest);
-requestRouter.route("/:uid").get(getPendingRequests);
+requestRouter.route("/pending/:uid").get(getPendingRequests);
 requestRouter.route("/followers/:uid").get(getAllFollowers);
 requestRouter.route("/following/:uid").get(getAllFollowing);
 requestRouter.route("/unfollow").delete(unfollow);

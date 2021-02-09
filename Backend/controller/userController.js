@@ -1,8 +1,6 @@
 const connection = require("../model/db");
 const { v4: uuidv4 } = require("uuid");
 
-
-
 function getAllUsers(req, res) {
   const sql = `SELECT * FROM user_table`;
   connection.query(sql, function (error, data) {
@@ -40,7 +38,7 @@ async function getUserById(req, res) {
     if (data.length) {
       res.status(200).json({
         message: "Got user by id",
-        data,
+        data : data[0],
       });
     } else {
       res.status(200).json({
@@ -54,15 +52,20 @@ async function getUserById(req, res) {
     });
   }
 }
+
+// working from body=>raw in req
+// not from body=>form-data in req
 function updateUserById(req, res) {
   const uid = req.params.uid;
   const updateObject = req.body;
+  console.log(updateObject);
   let sql = `UPDATE user_table SET `;
   for (key in updateObject) {
     sql += `${key} = '${updateObject[key]}' ,`;
   }
   sql = sql.substring(0, sql.length - 1);
   sql += `WHERE uid = '${uid}'`;
+  // console.log(sql);
   // UPDATE user_table
   // SET "name"="IRON MAN" "bio":"I am billionaire"
   // WHERE uid = '1313131'
@@ -105,12 +108,27 @@ function deleteUserById(req, res) {
 }
 function createUserPromisified(userObject) {
   return new Promise(function (resolve, reject) {
-    const { uid, name, email, pw, username, bio, isPublic } = userObject;
+    const {
+      uid,
+      name,
+      handle,
+      email,
+      bio,
+      phone,
+      is_public,
+      is_verifed,
+      pImage,
+    } = userObject;
     let sql;
-    if (isPublic != undefined) {
-      sql = `INSERT INTO user_table(uid , name , email , pw , username , bio , isPublic) VALUES ( '${uid}' , '${name}' , '${email}' , '${pw}' , '${username}' , '${bio}' , ${isPublic})`;
+    if (is_public != undefined) {
+      let defaultPImage = "images/user/default.jpeg";
+      sql = `INSERT INTO user_table(uid , name ,handle, email , bio ,phone, is_public ,is_verified, pImage) VALUES ( '${uid}' , '${name}' ,'${handle}', '${email}' , '${bio}' , '${phone}',${is_public} ,'${
+        is_verifed ? is_verifed : 0
+      }','${pImage ? pImage : defaultPImage}')`;
     } else {
-      sql = `INSERT INTO user_table(uid , name , email , pw , username , bio ) VALUES ( '${uid}' , '${name}' , '${email}' , '${pw}' , '${username}' , '${bio}')`;
+      sql = `INSERT INTO user_table(uid , name , handle,email , bio ,phone,is_verified,pImage) VALUES ( '${uid}' , '${name}' ,'${handle}' , '${email}' , '${bio}','${phone}','${
+        is_verifed ? is_verifed : 0
+      }' ,'${pImage ? pImage : "images/user/default.jpeg"}')`;
     }
     console.log(sql);
     connection.query(sql, function (error, data) {
@@ -125,16 +143,21 @@ function createUserPromisified(userObject) {
 async function createUser(req, res) {
   try {
     const uid = uuidv4();
-    const { name, email, pw, username, bio, isPublic } = req.body;
+    const { name, handle, email, bio, phone, is_public, is_verifed } = req.body;
     let userObject = {
       uid,
       name,
+      handle,
       email,
-      pw,
-      username,
       bio,
-      isPublic,
+      phone,
+      is_public,
+      is_verifed,
     };
+    if (req.file) {
+      let pImage = (req.file.destination + "/" + req.file.filename).substr(7);
+      userObject.pImage = pImage;
+    }
     let data = await createUserPromisified(userObject);
     res.status(200).json({
       message: "User Created Succssfully !!!",

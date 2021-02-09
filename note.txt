@@ -3,6 +3,6 @@ and suggestion api
 
 now backend has the part from where front end 2 starts
 i.e user / request work / unfollow and suggestion api etc (in videos)
-multer(written)
+multer(written for testing only maybe explained in frontend 2)
 
-backend copy has backend (may be final one)
+backend copy has backend (may be final one) - written for ref only
