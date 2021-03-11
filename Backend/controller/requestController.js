@@ -1,4 +1,5 @@
 const connection = require("../model/db");
+// const { use } = require("../router/requestRouter");
 const { getUserByIdPromisified } = require("./userController");
 
 function addInFollowingTablePromisified(user_id, following_id, is_public) {
@@ -9,7 +10,7 @@ function addInFollowingTablePromisified(user_id, following_id, is_public) {
     } else {
       sql = `INSERT INTO user_following(user_id , following_id , is_accepted ) VALUES('${user_id}' , '${following_id}' , false )`;
     }
-    console.log(sql);
+    // console.log(sql);
     connection.query(sql, function (error, data) {
       if (error) {
         reject(error);
@@ -94,6 +95,7 @@ function getAllFollowingIdsPromisifed(user_id) {
 function deleteFromFollowingTable(user_id, following_id) {
   return new Promise(function (resolve, reject) {
     let sql = `DELETE FROM user_following WHERE user_id = '${user_id}' AND following_id = '${following_id}'`;
+    console.log(sql);
     connection.query(sql, function (error, data) {
       if (error) {
         reject(error);
@@ -106,6 +108,7 @@ function deleteFromFollowingTable(user_id, following_id) {
 function deleteFromFollowerTable(follower_id, user_id) {
   return new Promise(function (resolve, reject) {
     let sql = `DELETE FROM user_follower WHERE user_id = '${user_id}' AND follower_id = '${follower_id}'`;
+    console.log(sql);
     connection.query(sql, function (error, data) {
       if (error) {
         reject(error);
@@ -118,10 +121,11 @@ function deleteFromFollowerTable(follower_id, user_id) {
 async function sendRequest(req, res) {
   try {
     let { user_id, follow_id } = req.body;
+    console.log(user_id, follow_id);
     let user = await getUserByIdPromisified(follow_id);
     let is_public = user[0].is_public;
     if (is_public) {
-      console.log("inside is Public true");
+      // console.log("inside is Public true");
       //add in following table with is_accepted = true
       let followingData = await addInFollowingTablePromisified(
         user_id,
@@ -138,8 +142,9 @@ async function sendRequest(req, res) {
         followerData,
       });
     } else {
-      console.log("inside is_public false");
-      //add in following table with is_accepted = false
+      // console.log("inside is_public false");
+      //add in following table with is_accepted = fals
+      console.log(user_id, follow_id);
       let data = await addInFollowingTablePromisified(user_id, follow_id);
       res.json({
         message: "Request Sent and is Pending !!",
@@ -156,6 +161,7 @@ async function sendRequest(req, res) {
 async function acceptRequest(req, res) {
   try {
     let { user_id, accept_id } = req.body;
+    console.log(user_id, accept_id);
     let acceptData = await acceptRequestPromisified(user_id, accept_id);
     let followerData = await addInFollowerTablePromisified(accept_id, user_id);
     res.json({
@@ -180,7 +186,7 @@ async function getPendingRequests(req, res) {
       let user = await getUserByIdPromisified(requests[i].user_id);
       requestsNames.push(user[0]);
     }
-    console.log(requestsNames);
+    // console.log(requestsNames);
     res.json({
       message: "Got All Pending Requests !",
       requestsNames,
@@ -192,6 +198,28 @@ async function getPendingRequests(req, res) {
     });
   }
 }
+
+async function getPendingRequestsUserObject(req, res) {
+  try {
+    let user_id = req.params.uid;
+    let requestsUid = await getPendingRequestsPromisfied(user_id);
+    let requests = [];
+    for (let i = 0; i < requestsUid.length; i++) {
+      let aUser = await getUserByIdPromisified(requestsUid[i].user_id);
+      requests.push(aUser);
+    }
+    res.json({
+      message: "Got All Pending Requests User Object !",
+      requests,
+    });
+  } catch (error) {
+    res.json({
+      message: "Failed to get User of Pending requests !!",
+      error,
+    });
+  }
+}
+
 async function cancelRequest(req, res) {
   try {
     let { user_id, cancel_id } = req.body;
@@ -260,16 +288,24 @@ async function getAllFollowing(req, res) {
     });
   }
 }
+
 async function unfollow(req, res) {
   try {
+    // console.log(req);
     let { user_id, unfollow_id } = req.body;
-    let followingObj = await deleteFromFollowingTable(user_id, unfollow_id);
-    let followerObj = await deleteFromFollowerTable(user_id, unfollow_id);
-    res.json({
-      message: "Unfollowed succesfully !",
-      followingObj,
-      followerObj,
-    });
+    if (user_id && unfollow_id) {
+      let followingObj = await deleteFromFollowingTable(user_id, unfollow_id);
+      let followerObj = await deleteFromFollowerTable(user_id, unfollow_id);
+      res.json({
+        message: "Unfollowed succesfully !",
+        followingObj,
+        followerObj,
+      });
+    } else {
+      res.json({
+        message: "User Id Undefined",
+      });
+    }
   } catch (error) {
     res.json({
       message: "Failed to unfollow !",
@@ -282,12 +318,12 @@ async function getSuggestions(req, res) {
   try {
     let { uid } = req.params;
     let followingIdsArray = await getAllFollowingIdsPromisifed(uid);
-    console.log("FOLLOWING OF USER", followingIdsArray);
+    // console.log("FOLLOWING OF USER", followingIdsArray);
 
     let followingIds = followingIdsArray.map((obj) => {
       return obj.following_id;
     });
-    console.log("FOLLOWING ID OF USER FOLLWING", followingIds);
+    // console.log("FOLLOWING ID OF USER FOLLWING", followingIds);
 
     let suggestionsIds = [];
     for (let i = 0; i < followingIds.length; i++) {
@@ -296,10 +332,10 @@ async function getSuggestions(req, res) {
       let followingIdsOf_User_ith_Following = await getAllFollowingIdsPromisifed(
         following_id
       );
-      console.log(
-        `FOLLOWING OF USER FOLLOWING[${i}]`,
-        followingIdsOf_User_ith_Following
-      );
+      // console.log(
+      //   `FOLLOWING OF USER FOLLOWING[${i}]`,
+      //   followingIdsOf_User_ith_Following
+      // );
 
       for (let j = 0; j < followingIdsOf_User_ith_Following.length; j++) {
         let fid = followingIdsOf_User_ith_Following[j].following_id;
@@ -314,13 +350,13 @@ async function getSuggestions(req, res) {
       }
     }
 
-    console.log("Suggestion Ids", suggestionsIds);
+    // console.log("Suggestion Ids", suggestionsIds);
     let suggestionsUser = [];
     for (let i = 0; i < suggestionsIds.length; i++) {
       let user = await getUserByIdPromisified(suggestionsIds[i]);
       suggestionsUser.push(user[0]);
     }
-    console.log("Suggestion Users", suggestionsUser);
+    // console.log("Suggestion Users", suggestionsUser);
     res.json({
       message: "Suggestions got Successfully!!!",
       suggestions: suggestionsUser,
@@ -340,3 +376,4 @@ module.exports.getAllFollowers = getAllFollowers;
 module.exports.getAllFollowing = getAllFollowing;
 module.exports.unfollow = unfollow;
 module.exports.getSuggestions = getSuggestions;
+module.exports.getPendingRequestsUserObject = getPendingRequestsUserObject;

@@ -28,13 +28,13 @@ const fileFilter = (req, file, cb) => {
 };
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
-// localhost:3000/api/users/
+// localhost:3000/api/user/
 userRouter.route("/").get(getAllUsers).post(upload.single("user"), createUser);
-// localhost:3000/api/users/:uid
+// localhost:3000/api/user/:uid
 userRouter
   .route("/:uid")
   .get(getUserById)
   .delete(deleteUserById)
-  .patch(updateUserById);
+  .patch(upload.single("user"), updateUserById);
 
 module.exports = userRouter;

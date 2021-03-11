@@ -1,4 +1,4 @@
-.post {
+.self-post {
   height: 550px;
   width: 500px;
   border: 1px solid lightgray;
@@ -6,15 +6,15 @@
   margin-bottom: 25px;
 }
 
-.post-username {
+.self-post-username {
   height: 10%;
   display: flex;
   align-items: center;
   border-bottom: 2px solid rgb(229, 234, 238);
-  margin-left:9px
+  margin-left: 9px;
 }
 
-.post-username img {
+.self-post-username img {
   height: 50px;
   width: 50px;
   border: 1px solid black;
@@ -34,10 +34,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 42px;
 }
 
-.post-image {
+.self-post-image {
   display: flex;
   justify-content: center;
   border-bottom: 2px solid rgb(229, 234, 238);
@@ -45,12 +44,12 @@
   width: 499px;
 }
 
-.post-image img {
+.self-post-image img {
   width: 100%;
   object-fit: contain;
 }
 
-.post-actions {
+.self-post-actions {
   height: 5%;
   width: 60px;
   display: flex;
@@ -61,21 +60,21 @@
 }
 .comment-icon {
 }
-.post-likes-count {
+.self-post-likes-count {
   height: 5%;
   padding-left: 10px;
 }
-.post-comments-section {
+.self-post-comments-section {
   height: 9.5%;
   padding-left: 10px;
 }
-.post-add-comment {
+.self-post-add-comment {
   height: 13%;
   display: flex;
   border-top: 2px solid rgb(229, 234, 238);
   align-items: center;
 }
-.post-add-comment input {
+.self-post-add-comment input {
   height: 100%;
   width: 82%;
   outline: none;
@@ -83,7 +82,7 @@
   padding: 10px;
   overflow: hidden;
 }
-.post-add-comment button {
+.self-post-add-comment button {
   height: 30px;
   align-items: center;
   display: flex;
@@ -101,4 +100,15 @@
   padding: 10px;
   overflow-x: hidden;
   overflow-y: scroll;
+}
+.self-post-comments {
+}
+.comment {
+  display: flex;
+}
+.user-who {
+  margin-right: 4px;
+}
+.user-commented {
+  height: 20px;
 }

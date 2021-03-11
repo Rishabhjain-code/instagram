@@ -1,0 +1,118 @@
+.profile {
+}
+.message {
+}
+.removed-follower {
+  background-color: red;
+  padding: 1%;
+  border: 1px solid;
+}
+.removed-following {
+  background-color: yellow;
+  padding: 1%;
+  border: 1px solid;
+}
+.profile-top {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 4%;
+  margin-bottom: 3%;
+}
+.profile-info {
+}
+.profile-user-details {
+}
+.profile-user-image-div {
+  height: 300px;
+  width: 300px;
+}
+.profile-user-image {
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+}
+.profile-name {
+  display: flex;
+  justify-content: center;
+}
+.profile-username {
+  display: flex;
+  justify-content: center;
+}
+.profile-user-bio {
+  display: flex;
+  justify-content: center;
+}
+.profile-stats {
+  display: flex;
+  justify-content: space-evenly;
+  width: 500px;
+  height: 300px;
+  align-items: center;
+}
+.profile-posts-count {
+}
+.profile-count {
+}
+.profile-followers-count {
+}
+.profile-following-count {
+}
+.profile-feeds {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  cursor: default;
+}
+.profile-followers {
+  cursor: pointer;
+}
+.profile-following {
+  cursor: pointer;
+}
+.followings,
+.followers,
+.requests {
+  display: flex;
+  justify-content: center;
+}
+.followings-list,
+.pending-requests-list,
+.followers-list {
+  /* background-color: pink; */
+  width: 40%;
+}
+.following-user,
+.follower-user,
+.request-user {
+  padding: 1%;
+  /* background-color: red; */
+  display: flex;
+  width: 500px;
+  margin-bottom: 2%;
+}
+.following-user-image img,
+.follower-user-image img,
+.request-user-image img {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+.following-user-details,
+.follower-user-details,
+.request-user-details {
+  width: 70%;
+}
+.following-user-name,
+.follower-user-name,
+.request-user-name {
+}
+.following-user-handle,
+.follower-user-handle,
+.request-user-handle {
+}
+.following-remove-button,
+.follower-remove-button {
+  width: 10%;
+}

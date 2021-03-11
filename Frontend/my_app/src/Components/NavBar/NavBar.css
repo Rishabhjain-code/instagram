@@ -7,6 +7,9 @@
     border-bottom: 1.5px solid lightgray;
     height: 70px;
     background: white;
+    padding-top: 6px;
+    position: sticky;
+    top: 0px;
 }
 
 .nav.logo{
@@ -24,7 +27,7 @@
     /* background-color: red; */
     /* to see its area in the page */
     display: flex;
-    width: 150px;
+    width: 25%;
     justify-content: space-around;
 }  
 .nav.links div{

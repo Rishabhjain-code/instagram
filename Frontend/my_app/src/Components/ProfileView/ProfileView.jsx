@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { Component } from "react";
+import uid from "../../uid";
 import "./ProfileView.css";
 // git remote add origin https://github.com/Rishabhjain-code/instagram.git
 
@@ -9,28 +10,32 @@ class ProfileView extends Component {
   state = {
     user: {
       // our db has handle current have username thus he let it as it is but I changed change everywhere he writes username accordingly where he took data from backend
-      handle: "ms@dhoni",
-      name: "Mahendra Singh Dhoni",
-      pImage: "image/default.png",
+      handle: "",
+      name: "",
+      pImage: "",
     },
     suggestions: [{}],
   };
 
   componentDidMount() {
-    let uid = "1327529f-fc1e-4f3f-b200-a2c9df65bbee";
-    // eqv to https:localhost:3000/user/uid as written proxy in package.json of frontend
+    // eqv to https:localhost:3000/api/user/uid as written proxy in package.json of frontend
     let user;
     axios
       .get(`api/user/${uid}`)
       .then((userData) => {
-        user = userData.data.data[0];
+        // console.log(userData);
+        user = userData.data.data;
+        // console.log("User",user);
       })
       .then(() => {
         return axios.get(`api/request/suggestions/${uid}`);
       })
       .then((obj) => {
-        console.log(obj);
+        // console.log(obj);
         let suggestions = obj.data.suggestions;
+        suggestions.map((suggestion)=>{
+          suggestion.isFollowed = false;
+        })
         this.setState({
           user: user,
           suggestions: suggestions,
@@ -41,10 +46,47 @@ class ProfileView extends Component {
       });
   }
 
+  //  PROFILE VIEW K FOLLOW BUTTON KA KAM
+
+  // sendRequest = (toWhom) => {
+  //   let {
+  //     user,suggestions
+  //   } = this.state;
+
+  //   axios({
+  //     method: "post",
+  //     url: "/api/request",
+  //     data: {
+  //       user_id: uid,
+  //       follow_id: toWhom,
+  //     },
+  //   }).then((obj) => {
+  //     // console.log(obj);
+  //     if (obj.data.message == "Request sent and accepted !!") {
+  //       for(let i=0;i<suggestions.length;i++){
+  //         if(suggestions[i])
+  //       }
+  //     } else {
+  //       requestedOrNot = true;
+  //     }
+
+  //     this.setState({
+  //       username,
+  //       userImage,
+  //       postImage,
+  //       caption,
+  //       likes,
+  //       followedOrNot,
+  //       requestedOrNot,
+  //     });
+  //     // console.log(this.state);
+  //   });
+  // };
+
   render() {
     return (
       <div className="profile-view">
-        {/* 
+        {/*  
         took for making the inner div at center as it needs justify-content:center but that needs display flex if more than 1 div then it will create error thus took 1 more div */}
         <div className="profile-view-div">
           <div className="profile-view-user-details">
@@ -64,22 +106,21 @@ class ProfileView extends Component {
             <div className="profile-view-heading">
               <h4>Suggestions</h4>
             </div>
-            {console.log(this.state)}
             {this.state.suggestions.map((suggestion) => {
               return (
                 <div
-                  key={suggestion.id}
+                  // key={suggestion.id}
                   className="profile-view-suggestion-user"
                 >
                   <div className="profile-view-user-image">
-                    <img src={suggestion.userImage} alt="" />
+                    <img src={suggestion.pImage} alt="" />
                   </div>
                   <div className="profile-view-user-names">
                     <div className="profile-view-username">
-                      {suggestion.username}
+                      {suggestion.handle}
                     </div>
                     <div className="profile-view-fullname">
-                      {suggestion.fullname}
+                      {suggestion.name}
                     </div>
                   </div>
                   <div className="profile-view-follow-button">

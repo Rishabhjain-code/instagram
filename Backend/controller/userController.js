@@ -34,11 +34,12 @@ function getUserByIdPromisified(uid) {
 async function getUserById(req, res) {
   try {
     const uid = req.params.uid;
+    // console.log(uid);
     let data = await getUserByIdPromisified(uid);
     if (data.length) {
       res.status(200).json({
         message: "Got user by id",
-        data : data[0],
+        data: data[0],
       });
     } else {
       res.status(200).json({
@@ -56,15 +57,23 @@ async function getUserById(req, res) {
 // working from body=>raw in req
 // not from body=>form-data in req
 function updateUserById(req, res) {
+  console.log(req.body);
   const uid = req.params.uid;
   const updateObject = req.body;
-  console.log(updateObject);
+  // console.log(updateObject);
   let sql = `UPDATE user_table SET `;
   for (key in updateObject) {
-    sql += `${key} = '${updateObject[key]}' ,`;
+    sql += `${key} = '${updateObject[key]}',`;
   }
-  sql = sql.substring(0, sql.length - 1);
-  sql += `WHERE uid = '${uid}'`;
+  // sql = sql.substring(0, sql.length - 1);
+  if (req.file) {
+    let pImage = (req.file.destination + "/" + req.file.filename).substr(7);
+    sql += `pImage = "${pImage}"`;
+  } else {
+    sql = sql.substring(0, sql.length - 1);
+  }
+  sql += ` WHERE uid = '${uid}'`;
+  // console.log(sql);
   // console.log(sql);
   // UPDATE user_table
   // SET "name"="IRON MAN" "bio":"I am billionaire"
@@ -130,7 +139,7 @@ function createUserPromisified(userObject) {
         is_verifed ? is_verifed : 0
       }' ,'${pImage ? pImage : "images/user/default.jpeg"}')`;
     }
-    console.log(sql);
+    // console.log(sql);
     connection.query(sql, function (error, data) {
       if (error) {
         reject(error);

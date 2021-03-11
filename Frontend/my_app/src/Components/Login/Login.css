@@ -1,0 +1,33 @@
+.login-page {
+  background-color: pink;
+  height: 85vh;
+  width: 30%;
+  border: 1px solid;
+  position: absolute;
+  border-radius: 10%;
+  left: 35%;
+}
+.login-logo {
+  height: 70%;
+  width: 70%;
+}
+.login-logo img {
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  left: 20%;
+}
+.credentials{}
+.login-email {
+}
+.login-email-input {
+}
+.login-password {
+}
+.login-password-input {
+}
+.login-button {
+}
+.login-button button {
+}
