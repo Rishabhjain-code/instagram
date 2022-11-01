@@ -10,7 +10,7 @@ Most important thing I learned is that, you do not know everything, neither any 
 As I build this to develop the skills of Web Development, there are some things which are missed in this, but still it taught a lot of concepts to me.
 Scope of Improvement Includes - 
 
-Scale the Website
-Add more users to the website
-Enhance the Security using Encryption
-Adding Artificial Intelligence to suggest the content
+##### Scale the Website
+##### Add more users to the website
+##### Enhance the Security using Encryption
+##### Adding Artificial Intelligence to suggest the content
